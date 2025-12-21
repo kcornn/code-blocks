@@ -5,7 +5,7 @@
 }
 
 .code-block-figure-wrapper {
-  border: 1px solid purple;
+  border: 1px solid #e6e6e6;
   margin: 0;
   border-radius: 4px;
   width: fit-content;
@@ -18,23 +18,42 @@
 }
 
 .header {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid purple;
+  border-bottom: 1px solid #e9e9e9;
   padding: 8px 16px;
   margin: 0;
-  background: rgb(143, 145, 192);
-  color: rgb(52, 51, 51);
+  background: linear-gradient(180deg, #fbfbfc 0%, #f2f3f4 100%);
+  color: #6b6b6b;
   align-items: center;
 }
 
 .header-left {
   display: flex;
   gap: 8px;
+  color: #6b6b6b;
 }
 
 .copy-btn {
   margin-left: auto;
+  background: transparent;
+  border: 0.5px solid #d6d6d6;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  line-height: 0;
+}
+
+.copy-btn svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+  color: #9d9c9c;
+}
+
+.copy-btn:hover {
+  background-color: #e6e6e6;
 }
 
 pre {
@@ -48,11 +67,6 @@ pre {
   background-color: #4d5389;
   border-left: 4px solid #ffcc00;
   margin-left: -4px;
-}
-
-button {
-  background: transparent;
-  border: 0.5px solid gray;
 }
 
 /* https://github.com/shikijs/shiki/issues/3#issuecomment-830564854 */
