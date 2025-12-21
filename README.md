@@ -10,4 +10,4 @@ Custom React component to display code blocks
 
 ## Other tools used
 
-- [Prism.js](https://prismjs.com/) + Prism.js themes
+- [Shiki syntax highlighter](https://shiki.style/)
