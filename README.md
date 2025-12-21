@@ -1,0 +1,13 @@
+# Code blocks (WIP)
+
+Custom React component to display code blocks
+
+## Tech stack
+
+- React + Typescript
+- Vite
+- Prettier + ESLint (formatting)
+
+## Other tools used
+
+- [Prism.js](https://prismjs.com/) + Prism.js themes
