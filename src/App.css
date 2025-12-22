@@ -1,16 +1,16 @@
 .App {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 45% 55%;
   gap: 16px;
+  padding: 16px;
 }
 
 .code-block-figure-wrapper {
   border: 1px solid #e6e6e6;
   margin: 0;
   border-radius: 4px;
-  width: fit-content;
-  overflow-x: auto;
-  max-width: 80%;
+  width: 100%;
+  overflow: hidden;
 }
 
 .code-block-figure {
@@ -61,6 +61,39 @@ pre {
   padding: 8px 16px;
   white-space: pre !important;
   overflow-x: auto;
+}
+
+.left {
+  position: relative;
+}
+
+.left .sticky-wrapper {
+  position: sticky;
+  top: 16px;
+  height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.code-block-wrapper {
+  overflow: auto;
+  max-height: calc(100vh - 140px);
+}
+
+.code-fallback {
+  padding: 16px;
+  color: #333;
+}
+
+.right {
+  padding-left: 8px;
+  background: #ffffff;
+}
+
+.note-section {
+  min-height: 100vh;
+  padding: 48px 8px;
 }
 
 .highlight {
