@@ -7,6 +7,16 @@ import type { CodeBlockProps } from "./types";
 import { handleCopyCode } from "./utils";
 
 const CodeBlock = ({ html, code, filename }: CodeBlockProps) => {
+  const [copied, setCopied] = useState(false);
+
+  const onCopy = async () => {
+    const hasCopied = await handleCopyCode(code);
+    if (hasCopied) {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <div className="code-block-figure-wrapper">
       <figure className="code-block-figure" aria-label="code block">
@@ -17,10 +27,11 @@ const CodeBlock = ({ html, code, filename }: CodeBlockProps) => {
           <button
             className="copy-btn"
             aria-label="Copy code to clipboard"
-            onClick={() => handleCopyCode(code)}
+            onClick={onCopy}
           >
             <CopyAllIcon />
           </button>
+          {copied && <div className="copy-toast">Copied!</div>}
         </div>
         <div className="code-block-wrapper">
           {html ? (

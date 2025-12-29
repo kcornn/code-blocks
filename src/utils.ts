@@ -3,8 +3,10 @@
 export const handleCopyCode = async (code: string) => {
   try {
     await navigator.clipboard.writeText(code);
+    return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error(error.message);
+    return false;
   }
 };

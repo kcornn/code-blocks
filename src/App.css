@@ -11,6 +11,7 @@
   border-radius: 4px;
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 .code-block-figure {
@@ -54,6 +55,31 @@
 
 .copy-btn:hover {
   background-color: #e6e6e6;
+}
+
+.copy-toast {
+  position: absolute;
+  align-items: center;
+  right: 64px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 10;
+}
+
+.copy-toast::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid rgba(0, 0, 0, 0.8);
 }
 
 pre {
