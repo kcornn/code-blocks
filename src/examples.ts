@@ -1,14 +1,16 @@
 import type { Section } from "./types";
 
-export const exampleCode = `function debounce(fn, delay) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      fn(...args);
-    }, delay);
-  };
-}`;
+export const debounceExample = `function debounce(fn, t) {
+    let timeout;
+    // Every time the returned function is called, 
+    // clearTimeout is called to reset the timer to t milliseconds.
+    return function(...args) {
+      // every time the function is triggered again before the delay is over, 
+      // reset the timer since the delay hasn't actually happened yet.
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn(...args), t);
+    }
+};`;
 
 export const longLineExampleCode = `function fetchUserProfileWithPermissionsAndPreferences(
   userId,
@@ -43,10 +45,10 @@ export const sections: Section[] = [
   {
     id: "intro",
     title: "Debounce utility",
-    note: "A simple debounce helper to avoid frequent calls.",
-    code: exampleCode,
+    note: `A simple debounce helper to avoid frequent calls. For a given delay of t milliseconds, it ensures that a function is only called once no calls have been made for t milliseconds. We use timeout to store the timer id and clearTimeout to reset it. Mnemonic: debounce delays until the bouncing stops.`,
+    code: debounceExample,
     filename: "debounce.js",
-    highlightLines: [2, 3, 4],
+    highlightLines: [9],
   },
   {
     id: "fetch",

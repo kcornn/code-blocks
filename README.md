@@ -11,7 +11,13 @@ Custom React component to display code blocks and corresponding notes, ideal for
 ## Other tools used
 
 - [Shiki syntax highlighter](https://shiki.style/)
+- Copilot
 
 ## Reference
 
 - [Modern Syntax Highlighting with Shiki in Next.js 14](https://www.nikolailehbr.ink/blog/syntax-highlighting-shiki-next-js/)
+
+## Todos
+
+- [ ] Notes should be able to take in html / better formatting
+- [ ] Better examples, maybe lecture-style (pick a topic)
