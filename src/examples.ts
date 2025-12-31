@@ -12,6 +12,21 @@ export const debounceExample = `function debounce(fn, t) {
     }
 };`;
 
+export const throttleExample = `function throttle(fn, t) {
+    let timer;
+    let nextTimeToCallFn = 0;
+    return function (...args) {
+        // either call function now or after a delay
+        const delay = Math.max(0, nextTimeToCallFn - Date.now())
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            fn(...args);
+            // update nextTimeToCallFn to t ms in the future.
+            nextTimeToCallFn = Date.now() + t;
+        }, delay); // after waiting delay ms, call fn.
+    }
+};`;
+
 export const longLineExampleCode = `function fetchUserProfileWithPermissionsAndPreferences(
   userId,
   includeSensitiveData,
@@ -43,12 +58,20 @@ export const longLineExampleCode = `function fetchUserProfileWithPermissionsAndP
 
 export const sections: Section[] = [
   {
-    id: "intro",
+    id: "debounce",
     title: "Debounce utility",
     note: `A simple debounce helper to avoid frequent calls. For a given delay of t milliseconds, it ensures that a function is only called once no calls have been made for t milliseconds. We use timeout to store the timer id and clearTimeout to reset it. Mnemonic: debounce delays until the bouncing stops.`,
     code: debounceExample,
     filename: "debounce.js",
     highlightLines: [9],
+  },
+  {
+    id: "throttle",
+    title: "Throttle utility",
+    note: `A simple throttle helper to avoid frequent calls. For a given delay of t milliseconds, it ensures that a function is called at most once every t milliseconds, even if the event happens multiple times in quick succession, like scrolling.`,
+    code: throttleExample,
+    filename: "throttle.js",
+    highlightLines: [5, 6],
   },
   {
     id: "fetch",
