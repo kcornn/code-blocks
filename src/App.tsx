@@ -1,7 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { codeToHtml } from "shiki";
 import CopyAllIcon from "@mui/icons-material/CopyAll";
-import "./App.css";
 import { sections } from "./examples";
 import type { CodeBlockProps } from "./types";
 import { handleCopyCode } from "./utils";
@@ -48,53 +46,41 @@ const CodeBlock = ({ html, code, filename }: CodeBlockProps) => {
   );
 };
 
-function App() {
+function App({ initialHtmls }: { initialHtmls?: (string | null)[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [htmls, setHtmls] = useState<(string | null)[]>([]);
+  const [htmls] = useState<(string | null)[]>(initialHtmls ?? []);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Precompute highlighted HTML for all sections so switching sections is instant
+  const [isLoading, setIsLoading] = useState(() => {
+    const arr = initialHtmls ?? [];
+    return arr.length === 0 || arr.some((h) => h === null);
+  });
+
+  // if initialHtmls prop changes, update loading state
   useEffect(() => {
-    let mounted = true;
-    const work = async () => {
-      const results: (string | null)[] = [];
-      for (const section of sections) {
-        try {
-          // include transformers to add data-line and highlight classes
-          // eslint-disable-next-line no-await-in-loop
-          const sectionHtml = await codeToHtml(section.code, {
-            lang: "javascript",
-            theme: "nord",
-            // https://shiki.style/guide/transformers#transformers
-            transformers: [
-              {
-                code(node) {
-                  this.addClassToHast(node, `language-javascript`);
-                },
-                line(node, line) {
-                  node.properties["data-line"] = line;
-                  if (
-                    Array.isArray(section.highlightLines) &&
-                    section.highlightLines.includes(line)
-                  ) {
-                    this.addClassToHast(node, "highlight");
-                  }
-                },
-              },
-            ],
-          });
-          results.push(sectionHtml);
-        } catch {
-          results.push(null);
-        }
-      }
-      if (mounted) setHtmls(results);
-    };
-    work();
+    const arr = initialHtmls ?? [];
+    if (arr.length > 0 && !arr.some((h) => h === null)) {
+      setIsLoading(false);
+    }
+  }, [initialHtmls]);
+
+  // Some shiki themes/styles may be injected asynchronously on first use.
+  // Render the already-computed HTML on a second animation frame to avoid
+  // briefly showing unstyled content. This mirrors the user-observed
+  // behavior where scrolling (a later render) causes highlighting to appear.
+  const [displayHtmls, setDisplayHtmls] = useState<(string | null)[]>([]);
+  useEffect(() => {
+    let raf = 0 as number | null;
+    if (htmls.length > 0) {
+      raf = requestAnimationFrame(() => {
+        setDisplayHtmls(htmls);
+        setIsLoading(false);
+      });
+    }
     return () => {
-      mounted = false;
+      if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [htmls]);
 
   // scroll handler picks the section that fills the viewport (page-like)
   useEffect(() => {
@@ -142,34 +128,45 @@ function App() {
 
   return (
     <div className="App two-column">
-      <div className="left">
-        <div className="sticky-wrapper">
-          <div className="meta">
-            <p>
-              Custom codeblock (+ notes) component powered by Shiki - very WIP
-            </p>
-            <a href="https://kcornn.github.io/">Back to portfolio</a>
-          </div>
-          <CodeBlock
-            html={htmls[activeIndex] ?? null}
-            code={sections[activeIndex].code}
-            filename={sections[activeIndex].filename}
-          />
+      {isLoading && (
+        <div className="loading-overlay" role="status" aria-live="polite">
+          <div className="loader" aria-hidden="true" />
+          <div className="loading-text">Loading highlights…</div>
         </div>
-      </div>
+      )}
+      {!isLoading && (
+        <>
+          <div className="left">
+            <div className="sticky-wrapper">
+              <div className="meta">
+                <p>
+                  Custom codeblock (+ notes) component powered by Shiki - very
+                  WIP
+                </p>
+                <a href="https://kcornn.github.io/">Back to portfolio</a>
+              </div>
+              <CodeBlock
+                html={displayHtmls[activeIndex] ?? null}
+                code={sections[activeIndex].code}
+                filename={sections[activeIndex].filename}
+              />
+            </div>
+          </div>
 
-      <div className="right" ref={containerRef}>
-        {sections.map((s, i) => (
-          <section
-            className={`note-section ${i === activeIndex ? "active" : ""}`}
-            key={s.id}
-            data-idx={i}
-          >
-            <h2>{s.title}</h2>
-            <p>{s.note}</p>
-          </section>
-        ))}
-      </div>
+          <div className="right" ref={containerRef}>
+            {sections.map((s, i) => (
+              <section
+                className={`note-section ${i === activeIndex ? "active" : ""}`}
+                key={s.id}
+                data-idx={i}
+              >
+                <h2>{s.title}</h2>
+                <p>{s.note}</p>
+              </section>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
